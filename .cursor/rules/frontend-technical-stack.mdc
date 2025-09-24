@@ -1,0 +1,85 @@
+---
+
+description: Defines advanced technology stack configurations and metadata integration patterns for React + TypeScript + Vite projects. Focuses on optimization and DDD-based development beyond basic setup.
+alwaysApply: false
+---
+
+# Advanced Frontend Technology Stack & Metadata Integration
+
+This rule defines the technology stack configuration for advanced features and metadata-based development after the basic project setup is completed.
+
+**Prerequisites**: Basic React + TypeScript + Vite project has already been set up.
+
+## Metadata Integration Technologies
+
+### Event Storming & DDD Integration
+- **OpenAPI Integration**: Automatic type generation from Swagger/OpenAPI specs
+- **Code Generation**: Metadata-based automatic component generation
+- **CQRS Support**: Command/Query separation pattern
+- **Aggregate Patterns**: Aggregate-based component structure
+
+## State Management (Zustand)
+
+### Aggregate-Based Store Pattern
+- **Store Structure**: `items[]`, `selectedItem`, `loading`, `error` + setters
+- **File Pattern**: `src/store/[boundedContext]/[aggregate].store.ts`
+- **Zustand Usage**: `create<State>((set) => ({ ... }))` with TypeScript interfaces
+
+## Router Configuration (React Router + Metadata)
+
+### Dynamic Route Generation
+- **Route Structure**: BoundedContext (`/${bc.name}`) → Aggregate (`/${bc.name}/${agg.namePlural}`) → Views (CQRS only)
+- **File Pattern**: `src/utils/route-generator.ts` with metadata-based route generation
+- **App Setup**: QueryClient + ThemeProvider + Router with generated routes
+
+## React Hook Patterns (React Query + Zustand)
+
+### Hook Architecture
+- **Aggregate Hooks**: `useQuery` for lists, `useMutation` for CRUD operations
+- **Command Hooks**: `useMutation` for non-REST commands with query invalidation
+- **ReadModel Hooks**: `useQuery` with search params for CQRS views
+- **File Pattern**: `src/hooks/[boundedContext]/use[Entity].ts`
+
+### Query Configuration
+- **Cache Settings**: 5min staleTime, 10min cacheTime, 3 retries
+- **Error Handling**: Integration with Zustand store for error state
+- **Invalidation**: Automatic query invalidation on mutations
+
+## API Service Patterns (Axios + Gateway)
+
+### Service Architecture
+- **Aggregate Services**: Full CRUD with HAL JSON transformation (`/{namePlural}`)
+- **Spring Data REST Response**: All API responses must be processed in Spring Data REST format (HAL JSON, _embedded, _links, page information, etc.)
+- **Command Services**: Custom endpoints (`/{aggregates.namePlural}/{id}/{command.name}`)
+- **Query Services**: Search with parameters (`/{views.namePlural}`)
+- **File Pattern**: `src/services/[boundedContext]/[entity].service.ts`
+
+### Gateway Integration
+- **Base URL**: Always use Gateway URL (`http://localhost:8088`)
+- **HAL JSON**: Automatic transformation for Spring Data REST format
+- **Error Handling**: Unified error handling with interceptors
+
+## Development Guidelines & Integration
+
+### Component Development Principles
+1. **Metadata Driven**: All components generated from Event Storming metadata
+2. **Type Safety**: Complete synchronization between domain models and UI types
+3. **Domain Separation**: Component separation by BoundedContext
+4. **CQRS Pattern**: Command/Query responsibility separation
+
+### Performance Optimization
+- **Lazy Loading**: Dynamic imports for metadata-based components
+- **Memoization**: React.memo with metadata fieldDescriptor comparison
+- **Code Splitting**: Route-based splitting for BoundedContext modules
+
+### TypeScript & Environment Setup
+- **Metadata Types**: AggregateMetadata, CommandMetadata, ViewMetadata interfaces
+- **Environment Variables**: `VITE_GATEWAY_URL`, `VITE_API_BASE_URL`, `VITE_OPENAPI_URL`
+- **OpenAPI Integration**: Auto-generated types from OpenAPI specifications
+
+### API Integration Patterns
+- **Endpoint Generation**: Metadata-based API endpoint mapping
+- **Spring Gateway**: Use port 8088 with HAL JSON transformation
+- **Type Generation**: Automatic type generation from OpenAPI specs
+
+**Important**: All configurations must be automatically generated based on metadata and OpenAPI specifications.

@@ -1,0 +1,935 @@
+
+openapi: 3.1.0
+info:
+  title: fooddelivery API
+  version: 0.0.1
+  description: API definition of fooddelivery
+  contact:
+    name: creator's name
+    url: http://creator.homepage.address
+    email: creator@creator.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+paths:
+  /orders:
+    summary: Global operations on orders
+    get:
+      tags:
+      - orders
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+              examples:
+                value:
+          description: Get list of orders
+      operationId: GetOrder
+      summary: Get list of orders
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: Changed Order
+      operationId: Post Order
+      summary: Post Order        
+  /orders/{id}:
+    summary: Specific operation on orders
+    get:
+      parameters:
+      - examples:
+          Long:
+            value: Long
+        name: id
+        description: Order name
+        schema:
+          type: Long
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              examples:
+                value:
+                    orderId: 1
+                    customerId: 1
+                    restaurantId: 1
+                    deliveryAddress: value
+                    orderStatus: value
+                    orderItems: value
+                    orderTotalAmount: 1.1
+                    paymentStatus: value
+                    createdAt: value
+                    updatedAt: value
+                    cartId: value
+          description: orders with specified id
+      operationId: GetOrderById
+      summary: Get Order by id
+      description: Get Order by id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: Changed Order
+      operationId: PatchOrder
+      summary: Patch existing Order
+    parameters:
+    - name: id
+      description: Order id
+      schema:
+        type: integer
+      in: path
+      required: true
+  /orders/{id}/confirmorder:
+    summary: ConfirmOrder operation on orders
+    PUT:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                orderId:
+                  description: orderId of this ConfirmOrder
+                  type: integer
+            examples:
+              Example 0:   
+                value:
+                  orderId: 5001
+              Example 1:   
+                value:
+                  orderId: 5003
+      parameters:
+      - name: id
+        description: ConfirmOrder name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              orderId: 5001
+          Example 1:   
+            value:
+              orderId: 5003
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              examples:
+                Example 0: 
+                  value:
+                    orderId: 5001
+                    orderStatus: CONFIRMED
+                    updatedAt: 2024-06-01T10:10:00Z
+                Example 1: 
+                  value:
+                    orderId: 5003
+                    orderStatus: 
+                    updatedAt: 
+          description: ConfirmOrder Operation
+      operationId: ConfirmOrder
+      summary: ConfirmOrder
+      description: ConfirmOrder
+  /orders/{id}placeorder:
+    summary: PlaceOrder operation on orders
+    POST:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                customerId:
+                  description: customerId of this PlaceOrder
+                  type: integer
+                cartId:
+                  description: cartId of this PlaceOrder
+                  type: string
+                deliveryAddress:
+                  description: deliveryAddress of this PlaceOrder
+                  type: string
+                orderItems:
+                  description: orderItems of this PlaceOrder
+                  type: string
+                orderTotalAmount:
+                  description: orderTotalAmount of this PlaceOrder
+                  type: number
+            examples:
+              Example 0:   
+                value:
+                  cartId: [object Object]
+                  customerId: 2001
+                  deliveryAddress: [object Object]
+                  orderItems: [object Object]
+                  orderTotalAmount: 24000
+              Example 1:   
+                value:
+                  cartId: [object Object]
+                  customerId: 2002
+                  deliveryAddress: [object Object]
+                  orderItems: 
+                  orderTotalAmount: 0
+      parameters:
+      - name: id
+        description: PlaceOrder name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              cartId: [object Object]
+              customerId: 2001
+              deliveryAddress: [object Object]
+              orderItems: [object Object]
+              orderTotalAmount: 24000
+          Example 1:   
+            value:
+              cartId: [object Object]
+              customerId: 2002
+              deliveryAddress: [object Object]
+              orderItems: 
+              orderTotalAmount: 0
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              examples:
+                Example 0: 
+                  value:
+                    cartId: [object Object]
+                    createdAt: 2024-06-01T10:00:00Z
+                    customerId: 2001
+                    deliveryAddress: [object Object]
+                    orderId: 5001
+                    orderItems: [object Object]
+                    orderStatus: PLACED
+                    orderTotalAmount: 24000
+                    paymentStatus: PENDING
+                Example 1: 
+                  value:
+                    cartId: [object Object]
+                    createdAt: 
+                    customerId: 2002
+                    deliveryAddress: [object Object]
+                    orderId: 
+                    orderItems: 
+                    orderStatus: 
+                    orderTotalAmount: 0
+                    paymentStatus: 
+          description: PlaceOrder Operation
+      operationId: PlaceOrder
+      summary: PlaceOrder
+      description: PlaceOrder
+  /orders/{id}/cancelorder:
+    summary: CancelOrder operation on orders
+    DELETE:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                orderId:
+                  description: orderId of this CancelOrder
+                  type: integer
+            examples:
+              Example 0:   
+                value:
+                  orderId: 5001
+              Example 1:   
+                value:
+                  orderId: 5002
+      parameters:
+      - name: id
+        description: CancelOrder name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              orderId: 5001
+          Example 1:   
+            value:
+              orderId: 5002
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              examples:
+                Example 0: 
+                  value:
+                    orderId: 5001
+                    orderStatus: CANCELLED
+                    updatedAt: 2024-06-01T10:05:00Z
+                Example 1: 
+                  value:
+                    orderId: 5002
+                    orderStatus: 
+                    updatedAt: 
+          description: CancelOrder Operation
+      operationId: CancelOrder
+      summary: CancelOrder
+      description: CancelOrder
+  /orders/{id}/prepareorder:
+    summary: PrepareOrder operation on orders
+    PUT:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                orderId:
+                  description: orderId of this PrepareOrder
+                  type: integer
+            examples:
+              Example 0:   
+                value:
+                  orderId: 5001
+              Example 1:   
+                value:
+                  orderId: 5004
+      parameters:
+      - name: id
+        description: PrepareOrder name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              orderId: 5001
+          Example 1:   
+            value:
+              orderId: 5004
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              examples:
+                Example 0: 
+                  value:
+                    orderId: 5001
+                    orderStatus: PREPARED
+                    updatedAt: 2024-06-01T10:20:00Z
+                Example 1: 
+                  value:
+                    orderId: 5004
+                    orderStatus: 
+                    updatedAt: 
+          description: PrepareOrder Operation
+      operationId: PrepareOrder
+      summary: PrepareOrder
+      description: PrepareOrder
+  /carts:
+    summary: Global operations on carts
+    get:
+      tags:
+      - carts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+              examples:
+                value:
+          description: Get list of carts
+      operationId: GetCart
+      summary: Get list of carts
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: Changed Cart
+      operationId: Post Cart
+      summary: Post Cart        
+  /carts/{id}:
+    summary: Specific operation on carts
+    get:
+      parameters:
+      - examples:
+          Long:
+            value: Long
+        name: id
+        description: Cart name
+        schema:
+          type: Long
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+              examples:
+                value:
+                    cartId: 1
+                    customerId: 1
+                    cartItems: value
+                    cartStatus: value
+                    createdAt: value
+                    updatedAt: value
+          description: carts with specified id
+      operationId: GetCartById
+      summary: Get Cart by id
+      description: Get Cart by id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: Changed Cart
+      operationId: PatchCart
+      summary: Patch existing Cart
+    parameters:
+    - name: id
+      description: Cart id
+      schema:
+        type: integer
+      in: path
+      required: true
+  /carts/{id}addmenutocart:
+    summary: AddMenuToCart operation on carts
+    POST:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                cartId:
+                  description: cartId of this AddMenuToCart
+                  type: integer
+                menuId:
+                  description: menuId of this AddMenuToCart
+                  type: integer
+                quantity:
+                  description: quantity of this AddMenuToCart
+                  type: integer
+                price:
+                  description: price of this AddMenuToCart
+                  type: number
+            examples:
+              Example 0:   
+                value:
+                  cartId: 1005
+                  menuId: 3008
+                  price: 9000
+                  quantity: 3
+      parameters:
+      - name: id
+        description: AddMenuToCart name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              cartId: 1005
+              menuId: 3008
+              price: 9000
+              quantity: 3
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+              examples:
+                Example 0: 
+                  value:
+                    cartId: 1005
+                    cartStatus: ACTIVE
+                    menuId: 3008
+                    price: 9000
+                    quantity: 3
+                    updatedAt: 2024-06-01T12:05:00Z
+          description: AddMenuToCart Operation
+      operationId: AddMenuToCart
+      summary: AddMenuToCart
+      description: AddMenuToCart
+  /reviews:
+    summary: Global operations on reviews
+    get:
+      tags:
+      - reviews
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+              examples:
+                value:
+          description: Get list of reviews
+      operationId: GetReview
+      summary: Get list of reviews
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Changed Review
+      operationId: Post Review
+      summary: Post Review        
+  /reviews/{id}:
+    summary: Specific operation on reviews
+    get:
+      parameters:
+      - examples:
+          Long:
+            value: Long
+        name: id
+        description: Review name
+        schema:
+          type: Long
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+              examples:
+                value:
+                    reviewId: 1
+                    orderId: 1
+                    customerId: 1
+                    rating: 1
+                    content: A string
+                    createdAt: value
+                    reviewStatus: value
+          description: reviews with specified id
+      operationId: GetReviewById
+      summary: Get Review by id
+      description: Get Review by id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: Changed Review
+      operationId: PatchReview
+      summary: Patch existing Review
+    parameters:
+    - name: id
+      description: Review id
+      schema:
+        type: integer
+      in: path
+      required: true
+  /reviews/{id}createreview:
+    summary: CreateReview operation on reviews
+    POST:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                orderId:
+                  description: orderId of this CreateReview
+                  type: integer
+                customerId:
+                  description: customerId of this CreateReview
+                  type: integer
+                rating:
+                  description: rating of this CreateReview
+                  type: integer
+                content:
+                  description: content of this CreateReview
+                  type: string
+            examples:
+              Example 0:   
+                value:
+                  content: 맛있고 빠르게 도착했어요!
+                  customerId: 2001
+                  orderId: 1001
+                  rating: 5
+              Example 1:   
+                value:
+                  content: 주문 완료 후 8일이 경과한 경우
+                  customerId: 2002
+                  orderId: 1002
+                  rating: 4
+      parameters:
+      - name: id
+        description: CreateReview name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              content: 맛있고 빠르게 도착했어요!
+              customerId: 2001
+              orderId: 1001
+              rating: 5
+          Example 1:   
+            value:
+              content: 주문 완료 후 8일이 경과한 경우
+              customerId: 2002
+              orderId: 1002
+              rating: 4
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+              examples:
+                Example 0: 
+                  value:
+                    content: 맛있고 빠르게 도착했어요!
+                    createdAt: 2024-03-20T10:00:00Z
+                    customerId: 2001
+                    orderId: 1001
+                    rating: 5
+                    reviewId: 3001
+                    reviewStatus: ACTIVE
+                Example 1: 
+                  value:
+                    content: 
+                    createdAt: 
+                    customerId: 
+                    orderId: 
+                    rating: 
+                    reviewId: 
+                    reviewStatus: 
+          description: CreateReview Operation
+      operationId: CreateReview
+      summary: CreateReview
+      description: CreateReview
+  /reviews/{id}/deletereview:
+    summary: DeleteReview operation on reviews
+    DELETE:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                reviewId:
+                  description: reviewId of this DeleteReview
+                  type: integer
+            examples:
+              Example 0:   
+                value:
+                  reviewId: 3001
+              Example 1:   
+                value:
+                  reviewId: 3002
+      parameters:
+      - name: id
+        description: DeleteReview name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              reviewId: 3001
+          Example 1:   
+            value:
+              reviewId: 3002
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+              examples:
+                Example 0: 
+                  value:
+                    deletedAt: 2024-03-22T08:00:00Z
+                    reviewId: 3001
+                Example 1: 
+                  value:
+                    deletedAt: 
+                    reviewId: 
+          description: DeleteReview Operation
+      operationId: DeleteReview
+      summary: DeleteReview
+      description: DeleteReview
+  /reviews/{id}/updatereview:
+    summary: UpdateReview operation on reviews
+    PUT:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                reviewId:
+                  description: reviewId of this UpdateReview
+                  type: integer
+                rating:
+                  description: rating of this UpdateReview
+                  type: integer
+                content:
+                  description: content of this UpdateReview
+                  type: string
+            examples:
+              Example 0:   
+                value:
+                  content: 조금 식어서 아쉬웠어요.
+                  rating: 3
+                  reviewId: 3001
+              Example 1:   
+                value:
+                  content: 삭제된 리뷰는 수정 불가
+                  rating: 2
+                  reviewId: 3002
+      parameters:
+      - name: id
+        description: UpdateReview name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              content: 조금 식어서 아쉬웠어요.
+              rating: 3
+              reviewId: 3001
+          Example 1:   
+            value:
+              content: 삭제된 리뷰는 수정 불가
+              rating: 2
+              reviewId: 3002
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+              examples:
+                Example 0: 
+                  value:
+                    content: 조금 식어서 아쉬웠어요.
+                    rating: 3
+                    reviewId: 3001
+                    updatedAt: 2024-03-21T09:00:00Z
+                Example 1: 
+                  value:
+                    content: 
+                    rating: 
+                    reviewId: 
+                    updatedAt: 
+          description: UpdateReview Operation
+      operationId: UpdateReview
+      summary: UpdateReview
+      description: UpdateReview
+components:
+  schemas:
+    Order:
+      title: Root Type for Order
+      description: The root of the Order type's schema.
+      type: object
+      properties:
+        orderId:
+          description: orderId of this Order
+          type: integer
+        customerId:
+          description: customerId of this Order
+          type: integer
+        restaurantId:
+          description: restaurantId of this Order
+          type: integer
+        deliveryAddress:
+          description: deliveryAddress of this Order
+          type: string
+        orderStatus:
+          description: orderStatus of this Order
+          type: string
+        orderItems:
+          description: orderItems of this Order
+          type: string
+        orderTotalAmount:
+          description: orderTotalAmount of this Order
+          type: number
+        paymentStatus:
+          description: paymentStatus of this Order
+          type: string
+        createdAt:
+          description: createdAt of this Order
+          type: string
+        updatedAt:
+          description: updatedAt of this Order
+          type: string
+        cartId:
+          description: cartId of this Order
+          type: string
+      example:
+        orderId: 1
+        customerId: 1
+        restaurantId: 1
+        deliveryAddress: value
+        orderStatus: value
+        orderItems: value
+        orderTotalAmount: 1.1
+        paymentStatus: value
+        createdAt: value
+        updatedAt: value
+        cartId: value
+tags:
+- name: Order
+  description: Order resource
+components:
+  schemas:
+    Cart:
+      title: Root Type for Cart
+      description: The root of the Cart type's schema.
+      type: object
+      properties:
+        cartId:
+          description: cartId of this Cart
+          type: integer
+        customerId:
+          description: customerId of this Cart
+          type: integer
+        cartItems:
+          description: cartItems of this Cart
+          type: string
+        cartStatus:
+          description: cartStatus of this Cart
+          type: string
+        createdAt:
+          description: createdAt of this Cart
+          type: string
+        updatedAt:
+          description: updatedAt of this Cart
+          type: string
+      example:
+        cartId: 1
+        customerId: 1
+        cartItems: value
+        cartStatus: value
+        createdAt: value
+        updatedAt: value
+tags:
+- name: Cart
+  description: Cart resource
+components:
+  schemas:
+    Review:
+      title: Root Type for Review
+      description: The root of the Review type's schema.
+      type: object
+      properties:
+        reviewId:
+          description: reviewId of this Review
+          type: integer
+        orderId:
+          description: orderId of this Review
+          type: integer
+        customerId:
+          description: customerId of this Review
+          type: integer
+        rating:
+          description: rating of this Review
+          type: integer
+        content:
+          description: content of this Review
+          type: string
+        createdAt:
+          description: createdAt of this Review
+          type: string
+        reviewStatus:
+          description: reviewStatus of this Review
+          type: string
+      example:
+        reviewId: 1
+        orderId: 1
+        customerId: 1
+        rating: 1
+        content: A string
+        createdAt: value
+        reviewStatus: value
+tags:
+- name: Review
+  description: Review resource

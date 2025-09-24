@@ -1,0 +1,438 @@
+
+openapi: 3.1.0
+info:
+  title: fooddelivery API
+  version: 0.0.1
+  description: API definition of fooddelivery
+  contact:
+    name: creator's name
+    url: http://creator.homepage.address
+    email: creator@creator.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+paths:
+  /deliveryRequests:
+    summary: Global operations on deliveryRequests
+    get:
+      tags:
+      - deliveryRequests
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeliveryRequest'
+              examples:
+                value:
+          description: Get list of deliveryRequests
+      operationId: GetDeliveryRequest
+      summary: Get list of deliveryRequests
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequest'
+          description: Changed DeliveryRequest
+      operationId: Post DeliveryRequest
+      summary: Post DeliveryRequest        
+  /deliveryRequests/{id}:
+    summary: Specific operation on deliveryRequests
+    get:
+      parameters:
+      - examples:
+          Long:
+            value: Long
+        name: id
+        description: DeliveryRequest name
+        schema:
+          type: Long
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequest'
+              examples:
+                value:
+                    deliveryRequestId: 1
+                    orderId: value
+                    restaurantLocation: A string
+                    riderId: 1
+                    status: value
+                    assignmentStatus: value
+                    deliveryStatus: value
+                    riderLocation: value
+                    routeInfo: A string
+                    createdAt: value
+                    updatedAt: value
+                    acceptedAt: value
+                    declinedAt: value
+                    deliveringAt: value
+                    deliveredAt: value
+          description: deliveryRequests with specified id
+      operationId: GetDeliveryRequestById
+      summary: Get DeliveryRequest by id
+      description: Get DeliveryRequest by id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequest'
+          description: Changed DeliveryRequest
+      operationId: PatchDeliveryRequest
+      summary: Patch existing DeliveryRequest
+    parameters:
+    - name: id
+      description: DeliveryRequest id
+      schema:
+        type: integer
+      in: path
+      required: true
+  /deliveryRequests/{id}/acceptdeliveryrequest:
+    summary: AcceptDeliveryRequest operation on deliveryRequests
+    PUT:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                deliveryRequestId:
+                  description: deliveryRequestId of this AcceptDeliveryRequest
+                  type: integer
+                riderId:
+                  description: riderId of this AcceptDeliveryRequest
+                  type: integer
+            examples:
+              Example 0:   
+                value:
+                  deliveryRequestId: 1
+                  riderId: 2001
+              Example 1:   
+                value:
+                  deliveryRequestId: 1
+                  riderId: 2002
+      parameters:
+      - name: id
+        description: AcceptDeliveryRequest name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              deliveryRequestId: 1
+              riderId: 2001
+          Example 1:   
+            value:
+              deliveryRequestId: 1
+              riderId: 2002
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequest'
+              examples:
+                Example 0: 
+                  value:
+                    acceptedAt: 2024-06-01T10:01:00Z
+                    assignmentStatus: ASSIGNED
+                    deliveryRequestId: 1
+                    riderId: 2001
+                Example 1: 
+                  value:
+                    acceptedAt: 2024-06-01T10:02:00Z
+                    assignmentStatus: ASSIGNED
+                    deliveryRequestId: 1
+                    riderId: 2002
+          description: AcceptDeliveryRequest Operation
+      operationId: AcceptDeliveryRequest
+      summary: AcceptDeliveryRequest
+      description: AcceptDeliveryRequest
+  /deliveryRequests/{id}/completedelivery:
+    summary: CompleteDelivery operation on deliveryRequests
+    PUT:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                deliveryRequestId:
+                  description: deliveryRequestId of this CompleteDelivery
+                  type: integer
+            examples:
+              Example 0:   
+                value:
+                  deliveryRequestId: 3
+      parameters:
+      - name: id
+        description: CompleteDelivery name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              deliveryRequestId: 3
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequest'
+              examples:
+                Example 0: 
+                  value:
+                    deliveredAt: 2024-06-01T10:10:00Z
+                    deliveryRequestId: 3
+                    deliveryStatus: DELIVERED
+                    orderId: [object Object]
+                    riderId: 2004
+          description: CompleteDelivery Operation
+      operationId: CompleteDelivery
+      summary: CompleteDelivery
+      description: CompleteDelivery
+  /deliveryRequests/{id}createdeliveryrequest:
+    summary: CreateDeliveryRequest operation on deliveryRequests
+    POST:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                orderId:
+                  description: orderId of this CreateDeliveryRequest
+                  type: string
+                restaurantLocation:
+                  description: restaurantLocation of this CreateDeliveryRequest
+                  type: string
+            examples:
+              Example 0:   
+                value:
+                  orderId: [object Object]
+                  restaurantLocation: 서울시 강남구 1번지
+      parameters:
+      - name: id
+        description: CreateDeliveryRequest name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              orderId: [object Object]
+              restaurantLocation: 서울시 강남구 1번지
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequest'
+              examples:
+                Example 0: 
+                  value:
+                    createdAt: 2024-06-01T10:00:00Z
+                    deliveryRequestId: 1
+                    orderId: [object Object]
+                    restaurantLocation: 서울시 강남구 1번지
+          description: CreateDeliveryRequest Operation
+      operationId: CreateDeliveryRequest
+      summary: CreateDeliveryRequest
+      description: CreateDeliveryRequest
+  /deliveryRequests/{id}/startdelivery:
+    summary: StartDelivery operation on deliveryRequests
+    PUT:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                deliveryRequestId:
+                  description: deliveryRequestId of this StartDelivery
+                  type: integer
+                riderLocation:
+                  description: riderLocation of this StartDelivery
+                  type: string
+            examples:
+              Example 0:   
+                value:
+                  deliveryRequestId: 3
+                  riderLocation: [object Object]
+      parameters:
+      - name: id
+        description: StartDelivery name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              deliveryRequestId: 3
+              riderLocation: [object Object]
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequest'
+              examples:
+                Example 0: 
+                  value:
+                    deliveringAt: 2024-06-01T10:04:00Z
+                    deliveryRequestId: 3
+                    deliveryStatus: DELIVERING
+                    orderId: [object Object]
+                    riderId: 2004
+          description: StartDelivery Operation
+      operationId: StartDelivery
+      summary: StartDelivery
+      description: StartDelivery
+  /deliveryRequests/{id}/declinedeliveryrequest:
+    summary: DeclineDeliveryRequest operation on deliveryRequests
+    PUT:
+      requestBody:
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                deliveryRequestId:
+                  description: deliveryRequestId of this DeclineDeliveryRequest
+                  type: integer
+                riderId:
+                  description: riderId of this DeclineDeliveryRequest
+                  type: integer
+            examples:
+              Example 0:   
+                value:
+                  deliveryRequestId: 2
+                  riderId: 2003
+      parameters:
+      - name: id
+        description: DeclineDeliveryRequest name
+        schema:
+          type: integer
+        in: path
+        required: true
+        examples:
+          Example 0:   
+            value:
+              deliveryRequestId: 2
+              riderId: 2003
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRequest'
+              examples:
+                Example 0: 
+                  value:
+                    assignmentStatus: WAITING
+                    declinedAt: 2024-06-01T10:03:00Z
+                    deliveryRequestId: 2
+                    riderId: 2003
+          description: DeclineDeliveryRequest Operation
+      operationId: DeclineDeliveryRequest
+      summary: DeclineDeliveryRequest
+      description: DeclineDeliveryRequest
+components:
+  schemas:
+    DeliveryRequest:
+      title: Root Type for DeliveryRequest
+      description: The root of the DeliveryRequest type's schema.
+      type: object
+      properties:
+        deliveryRequestId:
+          description: deliveryRequestId of this DeliveryRequest
+          type: integer
+        orderId:
+          description: orderId of this DeliveryRequest
+          type: string
+        restaurantLocation:
+          description: restaurantLocation of this DeliveryRequest
+          type: string
+        riderId:
+          description: riderId of this DeliveryRequest
+          type: integer
+        status:
+          description: status of this DeliveryRequest
+          type: string
+        assignmentStatus:
+          description: assignmentStatus of this DeliveryRequest
+          type: string
+        deliveryStatus:
+          description: deliveryStatus of this DeliveryRequest
+          type: string
+        riderLocation:
+          description: riderLocation of this DeliveryRequest
+          type: string
+        routeInfo:
+          description: routeInfo of this DeliveryRequest
+          type: string
+        createdAt:
+          description: createdAt of this DeliveryRequest
+          type: string
+        updatedAt:
+          description: updatedAt of this DeliveryRequest
+          type: string
+        acceptedAt:
+          description: acceptedAt of this DeliveryRequest
+          type: string
+        declinedAt:
+          description: declinedAt of this DeliveryRequest
+          type: string
+        deliveringAt:
+          description: deliveringAt of this DeliveryRequest
+          type: string
+        deliveredAt:
+          description: deliveredAt of this DeliveryRequest
+          type: string
+      example:
+        deliveryRequestId: 1
+        orderId: value
+        restaurantLocation: A string
+        riderId: 1
+        status: value
+        assignmentStatus: value
+        deliveryStatus: value
+        riderLocation: value
+        routeInfo: A string
+        createdAt: value
+        updatedAt: value
+        acceptedAt: value
+        declinedAt: value
+        deliveringAt: value
+        deliveredAt: value
+tags:
+- name: DeliveryRequest
+  description: DeliveryRequest resource
